@@ -4,7 +4,7 @@ This steganography challenge presents participants with a corrupted JPEG file. A
 # 🧩 Technical Breakdown
 The encryption process consists of three layers of obfuscation:
 
-1. XOR Encryption (Key: "Yoda")
+1. **XOR Encryption (Key: "Yoda")**
 Each byte of the image is XOR’d with a repeating 4-byte key: "Yoda". This step obscures readable headers and makes magic bytes (like 0xFF 0xD8) unrecognizable.
 
 2. 4-Byte Block Reordering
