@@ -1,0 +1,2 @@
+📁 Description
+This steganography challenge presents participants with a corrupted JPEG file. At first glance, the file appears unreadable and fails to open using typical image viewers or standard forensic tools. However, careful byte-level analysis reveals that the image was deliberately obfuscated using multiple reversible transformations inspired by the structure of the Force... and the wisdom of Master Yoda.
