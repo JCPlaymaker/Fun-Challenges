@@ -13,3 +13,13 @@ The image is split into 4-byte blocks. Within each block, the first two bytes ar
 #### 3. Byte Pair Swapping:
 Finally, every pair of adjacent bytes is swapped — [x y] → [y x]. This adds a final layer of confusion, especially when viewing the file in a hex editor.
 
+# 🔓 Decryption Strategy
+To recover the original image, one must reverse each transformation in the correct order:
+
+1. Swap every adjacent byte pair to undo the last step.
+
+2. Undo the 4-byte reordering by swapping halves back ([C D A B] → [A B C D]).
+
+3. XOR with "Yoda" again to restore the original bytes. (Since XOR is symmetrical, applying the same key decrypts it.)
+
+This layered approach ensures that standard tools like file, binwalk, or steghide will fail until the image structure is repaired at the binary level.
