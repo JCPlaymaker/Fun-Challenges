@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void swap(unsigned char *a, unsigned char *b) {
     unsigned char tmp = *a;
@@ -8,12 +9,13 @@ void swap(unsigned char *a, unsigned char *b) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 4) {
-        printf("Usage: %s <input.jpg> <output.yoda> <xor_key>\n", argv[0]);
+    if (argc != 3) {
+        printf("Usage: %s <input.jpg> <output.yoda>\n", argv[0]);
         return 1;
     }
 
-    unsigned char xor_key = (unsigned char)strtol(argv[3], NULL, 0);
+    const unsigned char key[] = "Yoda"; // 4-byte key
+    const size_t key_len = strlen((const char *)key);
 
     FILE *in = fopen(argv[1], "rb");
     if (!in) { perror("fopen input"); return 1; }
@@ -28,18 +30,18 @@ int main(int argc, char *argv[]) {
     fread(data, 1, size, in);
     fclose(in);
 
-    // Step 1: XOR every byte
+    // Step 1: XOR each byte with repeating key
     for (long i = 0; i < size; i++) {
-        data[i] ^= xor_key;
+        data[i] ^= key[i % key_len];
     }
 
-    // Step 2: Swap 4-byte blocks (CDAB style)
+    // Step 2: Swap 4-byte blocks [A B C D] -> [C D A B]
     for (long i = 0; i + 3 < size; i += 4) {
         swap(&data[i+0], &data[i+2]);
         swap(&data[i+1], &data[i+3]);
     }
 
-    // Step 3: Swap every adjacent byte
+    // Step 3: Swap every adjacent byte [x y] -> [y x]
     for (long i = 0; i + 1 < size; i += 2) {
         swap(&data[i], &data[i+1]);
     }
@@ -51,7 +53,7 @@ int main(int argc, char *argv[]) {
     fclose(out);
     free(data);
 
-    printf("[+] Obfuscated file written to: %s (XOR key: 0x%02x)\n", argv[2], xor_key);
+    printf("[+] Obfuscated file written to: %s using XOR key \"Yoda\"\n", argv[2]);
     return 0;
 }
 
